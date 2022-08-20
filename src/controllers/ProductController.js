@@ -50,7 +50,16 @@ const getProducts = (req, res) => {
 const getProduct = (req, res) => {
     const id = req.params.id;
 
-    Product.findByPk(id)
+    Product.findByPk(id, {
+        include: {
+            model: Comment,
+            attributes: ["id", "body"],
+            include: {
+                model: User,
+                attributes: ["id", "email"]
+            }
+        }
+    })
         .then((product) => {
             if (!product) {
                 res.status(404).send("product not found");
