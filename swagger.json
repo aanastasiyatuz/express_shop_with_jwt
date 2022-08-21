@@ -132,6 +132,22 @@
         "tags": [
           "Product"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "page",
+            "type": "integer"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "search",
+            "type": "string"
+          }
+        ],
         "summary": "Products list",
         "responses": {
           "200": {
