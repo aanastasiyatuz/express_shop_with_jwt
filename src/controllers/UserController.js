@@ -26,8 +26,30 @@ const registration = async (req, res, next) => {
     return res.json({ token });
 };
 
+const createStaffUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).send("email and password are required");
+    }
+
+    const candidate = await User.findOne({ where: { email } });
+    if (candidate) {
+        return res.status(400).send("user with this email already exists");
+    };
+
+    const hashPassword = await bcrypt.hash(password, 5);
+    const user = await User.create({ email, password: hashPassword, is_staff: true });
+    const token = generateJwt(user.id, user.email);
+    return res.json({ token });
+}
+
 const login = async (req, res, next) => {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).send("email and password are required");
+    }
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
@@ -49,6 +71,7 @@ const check = async (req, res, next) => {
 }
 
 module.exports = {
+    createStaffUser,
     registration,
     login,
     check

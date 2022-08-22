@@ -43,7 +43,7 @@ const getProduct = async (req, res) => {
     res.status(200).json(product)
 };
 
-const addProduct = (req, res) => {
+const addProduct = async (req, res) => {
     const data = req.body;
     const files = req.files;
 
@@ -57,14 +57,8 @@ const addProduct = (req, res) => {
         createFile(name, files.image.data);
     };
 
-    Product.create(data)
-        .then((product) => {
-            res.status(201).json(product);
-        })
-        .catch((error) => {
-            console.log(error);
-            res.status(500);
-        });
+    const product = await Product.create(data);
+    res.status(201).json(product);
 };
 
 const updateProduct = async (req, res) => {

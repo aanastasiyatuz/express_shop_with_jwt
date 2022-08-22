@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const userMiddleware = async (req, res, next) => {
+const adminMiddleware = async (req, res, next) => {
     if (req.method === "OPTIONS") {
         next();
     }
@@ -21,6 +21,9 @@ const userMiddleware = async (req, res, next) => {
             return res.status(400).json({ message: "Invalid token" })
         }
         req.user = decoded;
+        if (!user.is_staff) {
+            return res.status(403).json({ message: "Forbidden" })
+        }
         next();
 
     } catch (e) {
@@ -29,4 +32,4 @@ const userMiddleware = async (req, res, next) => {
 };
 
 
-module.exports = userMiddleware;
+module.exports = adminMiddleware;
