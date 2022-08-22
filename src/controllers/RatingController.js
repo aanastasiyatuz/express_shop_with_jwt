@@ -8,7 +8,7 @@ const addRating = async (req, res) => {
 
     if (!data.value) {
         return res.status(400).send("value is required");
-    } else if (!(+data.value in [1, 2, 3, 4, 5])) {
+    } else if (+data.value < 1 || +data.value > 5) {
         return res.status(400).send("invalid value for rating")
     }
 

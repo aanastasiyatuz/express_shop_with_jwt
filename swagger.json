@@ -35,7 +35,7 @@
     }
   ],
   "paths": {
-    "/account/register/": {
+    "/account/register": {
       "post": {
         "tags": [
           "Account"
@@ -71,7 +71,7 @@
         }
       }
     },
-    "/account/login/": {
+    "/account/login": {
       "post": {
         "tags": [
           "Account"
@@ -107,7 +107,7 @@
         }
       }
     },
-    "/account/check/": {
+    "/account/check": {
       "get": {
         "tags": [
           "Account"
@@ -127,7 +127,7 @@
         }
       }
     },
-    "/products/": {
+    "/products": {
       "get": {
         "tags": [
           "Product"
@@ -247,7 +247,7 @@
         }
       }
     },
-    "/products/{id}/": {
+    "/products/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -354,10 +354,10 @@
         }
       }
     },
-    "/comments/{id}": {
+    "/comments/{productId}": {
       "parameters": [
         {
-          "name": "id",
+          "name": "productId",
           "in": "path",
           "required": true,
           "description": "product id",
@@ -387,7 +387,18 @@
             "description": "Created"
           }
         }
-      },
+      }
+    },
+    "/comments/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "comment id",
+          "type": "integer"
+        }
+      ],
       "patch":{
         "tags":["Comment"],
         "summary":"Update comment",
@@ -416,6 +427,59 @@
         "responses":{
           "204":{
             "description":"No Content"
+          }
+        }
+      }
+    },
+    "/toggle-like/{id}":{
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "product id",
+          "type": "integer"
+        }
+      ],
+      "get":{
+        "tags":["Product"],
+        "summary":"Toggle like",
+        "responses":{
+          "201":{
+            "description":"Created"
+          }
+        }
+      }
+    },
+    "/add-rating/{id}":{
+      "parameters":[
+        {
+          "name":"id",
+          "in":"path",
+          "required":true,
+          "description":"product id",
+          "type":"integer"
+        }
+      ],
+      "post":{
+        "tags":["Product"],
+        "summary":"Add rating",
+        "parameters":[
+          {
+            "name":"rating",
+            "in":"body",
+            "schema":{
+              "properties":{
+                "value":{
+                  "type":"integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "201":{
+            "description":"Created"
           }
         }
       }
@@ -459,7 +523,9 @@
     },
     "Comment": {
       "required": [
-        "body"
+        "body",
+        "userId",
+        "productId"
       ],
       "properties": {
         "id": {
@@ -468,6 +534,52 @@
         },
         "body": {
           "type": "text"
+        },
+        "productId":{
+          "type":"integer"
+        },
+        "userId":{
+          "type":"integer"
+        }
+      }
+    },
+    "Like":{
+      "required":[
+        "productId",
+        "userId"
+      ],
+      "properties":{
+        "id":{
+          "type":"integer",
+          "uniqueItems":true
+        },
+        "userId":{
+          "type":"integer"
+        },
+        "productId":{
+          "type":"integer"
+        }
+      }
+    },
+    "Rating":{
+      "required":[
+        "productId",
+        "userId",
+        "value"
+      ],
+      "properties":{
+        "id":{
+          "type":"integer",
+          "uniqueItems":true
+        },
+        "productId":{
+          "type":"integer"
+        },
+        "userId":{
+          "type":"integer"
+        },
+        "value":{
+          "type":"integer"
         }
       }
     }

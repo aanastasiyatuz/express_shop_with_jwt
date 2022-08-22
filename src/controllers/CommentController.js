@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 const isAuthor = require("../utils/isAuthor");
 
 const addComment = async (req, res) => {
-    const productId = req.params.id;
+    const productId = req.params.productId;
     const userId = req.user.id;
     const data = req.body;
 
